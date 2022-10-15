@@ -4,7 +4,7 @@ import getCliArgument from '../functions/getCliArgument.js'
 import Table from 'cli-table3'
 import chalk from 'chalk'
 
-const filepath = `${outFileDir}/${getCliArgument('--filepath')}`
+const filepath = `${outFileDir}/${getCliArgument('--file')}`
 
 async function main() {
   const json = JSON.parse(fs.readFileSync(filepath))

@@ -19,7 +19,7 @@ const registrarControllerContract = new ethers.Contract(
 )
 
 async function lookupENS(name) {
-  const preparedName = name.toLowerCase()
+  const preparedName = name.toLowerCase().trim()
   const BigNumber = ethers.BigNumber
   const utils = ethers.utils
   const labelHash = utils.keccak256(utils.toUtf8Bytes(preparedName))
