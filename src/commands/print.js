@@ -10,7 +10,7 @@ async function main() {
   const json = JSON.parse(fs.readFileSync(filepath))
 
   const table = new Table({
-    head: ['#', 'Name', 'Price', 'Expires', 'Available']
+    head: ['#', 'Name', 'Link', 'Price', 'Expires', 'Available']
   })
 
   json.sort((a, b) => {
@@ -27,8 +27,15 @@ async function main() {
     const date = new Date(element.expires)
     const preparedDate = date.toUTCString().replace('GMT', '').substring(4, 22)
 
-    table.push([index, element.name, element.price, preparedDate, element.available ? chalk.blue(true) : false])
-  });
+    table.push([
+      index,
+      element.name,
+      `https://app.ens.domains/name/${element.name}.eth/register`,
+      element.price,
+      preparedDate,
+      element.available ? chalk.blue(true) : false,
+    ])
+  })
 
   console.log(table.toString())
 }
