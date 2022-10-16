@@ -16,9 +16,12 @@ async function main() {
   canditates = canditates.filter(item => item.length > 2)
 
   const duplicates = canditates.filter((item, index) => index !== canditates.indexOf(item));
-  console.log('Duplicates found:', duplicates)
-  console.log('')
-
+  
+  if (duplicates.length) {
+    console.log('Duplicates found:', duplicates)
+    console.log('')
+  }
+  
   // Remove duplicates
   canditates = [...new Set(canditates)]
 
