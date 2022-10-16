@@ -1,3 +1,4 @@
+import '../boot.js'
 import lookupENS from '../functions/lookupENS.js'
 import writeItems from '../functions/writeItem.js'
 import getAllWords from '../functions/getAllWords.js';
@@ -19,9 +20,14 @@ async function main() {
 
   const result = []
   for (const canditate of filtered) {
-    const ens = await lookupENS(canditate)
-    result.push(ens)
-    console.log(`${canditates.length}/${result.length} Handled`, ens)
+    try {
+      const ens = await lookupENS(canditate)
+      result.push(ens)
+
+      console.log(`${canditates.length}/${result.length} Handled`, ens)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   console.log('Writing file')

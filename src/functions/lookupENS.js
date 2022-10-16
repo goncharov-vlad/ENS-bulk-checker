@@ -2,7 +2,7 @@ import { ethers } from "ethers"
 import baseRegistrarImplementationArtifact from '../artifacts/baseRegistrarImplementation.js'
 import registrarControllerArtifact from '../artifacts/registrarController.js'
 
-const localProvider = new ethers.providers.JsonRpcProvider('http://localhost:8545')
+const localProvider = new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER)
 
 const provider = localProvider
 

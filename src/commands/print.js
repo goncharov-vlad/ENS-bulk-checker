@@ -13,6 +13,16 @@ async function main() {
     head: ['#', 'Name', 'Price', 'Expires', 'Available']
   })
 
+  json.sort((a, b) => {
+    if (a.available > b.available) {
+      return -1
+    }
+
+    if (a.expires < b.expires) {
+      return -1
+    }
+  })
+
   json.forEach((element, index) => {
     const date = new Date(element.expires)
     const preparedDate = date.toUTCString().replace('GMT', '').substring(4, 22)
