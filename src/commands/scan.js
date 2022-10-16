@@ -8,29 +8,37 @@ import getCliArgument from '../functions/getCliArgument.js';
 const filepath = `${outFileDir}/${getCliArgument('--outfile')}`
 
 async function main() {
-  console.log('Getting words')
-  const canditates = getAllWords()
+  console.log('[GETTING WORDS]')
+  console.log('')
+  let canditates = getAllWords()
 
   // Remove words with lenght less then 3 symbols
-  const filtered = canditates.filter(item => item.length > 2)
+  canditates = canditates.filter(item => item.length > 2)
 
-  const totalCanditates = filtered.length
-  console.log(`  Total words ${totalCanditates}`)
+  const duplicates = canditates.filter((item, index) => index !== canditates.indexOf(item));
+  console.log('Duplicates found:', duplicates)
+  console.log('')
+
+  // Remove duplicates
+  canditates = [...new Set(canditates)]
+
+  const totalCanditates = canditates.length
+  console.log('Total words:', totalCanditates)
   console.log('')
 
   const result = []
-  for (const canditate of filtered) {
+  for (const canditate of canditates) {
     try {
       const ens = await lookupENS(canditate)
       result.push(ens)
 
-      console.log(`${canditates.length}/${result.length} Handled`, ens)
+      console.log(`[${canditates.length}/${result.length} HANDLED]`, ens)
     } catch (e) {
       console.log(e)
     }
   }
 
-  console.log('Writing file')
+  console.log('[WRITING FILE]')
   writeItems(filepath, result)
 }
 
