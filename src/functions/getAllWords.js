@@ -1,16 +1,6 @@
 import fs from 'fs'
-import { wordsDir } from '../constants.js'
+import { favoritesFile, wordsDir } from '../constants.js'
 import getCliArgument from '../functions/getCliArgument.js';
-
-function getFileWords(filepath) {
-  const content = fs
-    .readFileSync(`${wordsDir}/${filepath}`)
-    .toString()
-
-  const words = content.split("\n")
-
-  return words
-}
 
 function getAllWords() {
   let allWords = []
@@ -24,7 +14,7 @@ function getAllWords() {
   fs
     .readdirSync(wordsDir)
     .forEach(file => {
-      if (file === '.gitignore') {
+      if (file === '.gitignore' || file === favoritesFile) {
         return
       }
 
