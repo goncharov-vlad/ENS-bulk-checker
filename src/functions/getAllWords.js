@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { favoritesFile, wordsDir } from '../constants.js'
-import getCliArgument from '../functions/getCliArgument.js';
+import getCliArgument from '../functions/getCliArgument.js'
+import getFileWords from '../functions/getFileWords.js'
 
 function getAllWords() {
   let allWords = []
