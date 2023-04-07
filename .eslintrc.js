@@ -7,5 +7,8 @@ module.exports = {
     project: './tsconfig.json',
     ecmaVersion: 'latest',
     sourceType: 'module',
+  },
+  rules: {
+    "import/no-cycle": "off"
   }
 }
