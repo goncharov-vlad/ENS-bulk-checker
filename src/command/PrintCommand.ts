@@ -9,7 +9,7 @@ import FileManager from '../FileManager';
 export default class PrintCommand extends AbstractCommand {
   constructor() {
     FileManager.createIfIsNotExist(FileManager.filepath.scanResult, JSON.stringify([]));
-    FileManager.createIfIsNotExist(FileManager.filepath.favorite, '');
+    FileManager.createIfIsNotExist(FileManager.filepath.favoriteName, '');
 
     super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${FileManager.filepath})`);
   }
@@ -42,7 +42,9 @@ export default class PrintCommand extends AbstractCommand {
     const gracePeriod = (await baseRegistrarImplementation.GRACE_PERIOD())
       .toNumber() * 1000;
 
-    return scanResult.map(({ expires, name, price }, index) => [
+    const sorted = PrintCommand.sortScanResult(scanResult);
+
+    return sorted.map(({ expires, name, price }, index) => [
       index + 1,
       name,
       price,
@@ -56,13 +58,21 @@ export default class PrintCommand extends AbstractCommand {
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async run() {
-    const { log } = App;
-
+  private static async createTable(items: ScanResult) {
     const table = new Table({
       head: ['#', 'Name', 'Last Price', 'Expires', 'Link'],
     });
+
+    const preparedItems = await PrintCommand.prepareScanResult(items);
+
+    table.push(...preparedItems);
+
+    return table;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async run() {
+    const { log } = App;
 
     const scanResult = PrintCommand.getScanResult();
 
@@ -71,15 +81,23 @@ export default class PrintCommand extends AbstractCommand {
       return false;
     }
 
-    const prepareScanResult = await PrintCommand.prepareScanResult(
-      PrintCommand.sortScanResult(
-        scanResult,
-      ),
-    );
+    const favoriteNames = FileManager.getNames(FileManager.filepath.favoriteName);
+    const onlyFavoriteNameResult = scanResult.filter(({ name }) => favoriteNames.includes(name));
+    const onlyOthersNameResult = scanResult.filter(({ name }) => !favoriteNames.includes(name));
 
-    table.push(...prepareScanResult);
+    log(chalk.bold('Favorite ENS names:', onlyFavoriteNameResult.length));
 
-    log(table.toString());
+    if (onlyFavoriteNameResult.length) {
+      log((await PrintCommand.createTable(onlyFavoriteNameResult))
+        .toString());
+    }
+
+    log(chalk.dim(`${chalk.bold('NOTE')}: You can save your favorite ENS names in the file ${FileManager.filepath.favoriteName}`));
+    log('');
+    log(chalk.bold('Other ENS names:', onlyOthersNameResult.length));
+
+    log((await PrintCommand.createTable(onlyOthersNameResult))
+      .toString());
 
     return true;
   }

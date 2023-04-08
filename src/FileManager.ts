@@ -3,7 +3,7 @@ import fs from 'fs';
 export default class FileManager {
   static filepath = {
     scanResult: './resource/scanResult.json',
-    favorite: './resource/favorite.txt',
+    favoriteName: './resource/favoriteName.txt',
     name: './resource/name.txt',
   };
 
@@ -18,6 +18,18 @@ export default class FileManager {
       .readFileSync(filepath)
       .toString()
       .trim();
+  }
+
+  static getNames(filepath: string) {
+    const string = FileManager.getFileContentAsString(filepath);
+
+    if (!string) {
+      return [];
+    }
+
+    const names = string.split('\n');
+
+    return names.map((name) => name.toLowerCase().trim());
   }
 
   static writeFile(filepath: string, content: string) {

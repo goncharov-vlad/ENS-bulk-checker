@@ -21,18 +21,6 @@ export default class ScanCommand extends AbstractCommand {
     FileManager.createIfIsNotExist(FileManager.filepath.name, '');
   }
 
-  static getNames() {
-    const string = FileManager.getFileContentAsString(FileManager.filepath.name);
-
-    if (!string) {
-      return false;
-    }
-
-    const names = string.split('\n');
-
-    return names.map((name) => name.toLowerCase().trim());
-  }
-
   async lookupName(name: string) {
     const { BigNumber, utils } = ethers;
     const labelHash = utils.keccak256(utils.toUtf8Bytes(name));
@@ -58,9 +46,9 @@ export default class ScanCommand extends AbstractCommand {
 
   async run() {
     const { log } = App;
-    let names = ScanCommand.getNames();
+    let names = FileManager.getNames(FileManager.filepath.name);
 
-    if (!names) {
+    if (!names.length) {
       log(`There are no names to look up, please add several to ${FileManager.filepath.name}`);
       return false;
     }
