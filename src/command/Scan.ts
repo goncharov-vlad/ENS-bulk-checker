@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import fs from 'fs';
+import chalk from 'chalk';
 import AbstractCommand from './AbstractCommand';
 import App from '../App';
 import { ScanResult } from '../type';
@@ -27,7 +28,7 @@ export default class Scan extends AbstractCommand {
     const { filepath } = Scan;
 
     if (!fs.existsSync(filepath)) {
-      throw new Error(`${filepath} doen't exist, plese create it and add name you wanna lookup`);
+      fs.writeFileSync(filepath, '');
     }
 
     const string = fs
@@ -36,7 +37,7 @@ export default class Scan extends AbstractCommand {
       .trim();
 
     if (!string) {
-      throw new Error('You don\'t have any names to lookup, please add several to the file');
+      throw new Error(`You don't have any names to lookup, please add several to ${filepath}`);
     }
 
     const names = string.split('\n');
@@ -85,38 +86,42 @@ export default class Scan extends AbstractCommand {
 
   async run() {
     const { log } = App;
-
-    log('[GETTING WORDS]');
-    log('');
-
     let names = Scan.getNames();
 
     const duplicates = Scan.findDuplicates(names);
 
     if (duplicates.length) {
-      log('Duplicates found:', duplicates);
+      log(chalk.bold('Found duplicates:'), duplicates.length);
+      log('');
+      log(duplicates.join('\n'));
       log('');
     }
 
     names = Scan.removeDuplicates(names);
 
-    log('Total names:', names.length);
+    log(chalk.bold('Names count:'), names.length);
     log('');
 
     const result = [];
 
     // eslint-disable-next-line no-restricted-syntax
     for (const name of names) {
+      let logText = `${names.length}/${result.length + 1} | `;
+
       try {
         // eslint-disable-next-line no-await-in-loop
-        const handled = await this.lookupName(name);
-        result.push(handled);
-
-        log(`[${names.length}/${result.length} HANDLED]`, handled);
+        result.push(await this.lookupName(name));
+        logText += `${chalk.bold(chalk.blueBright('success'))} | `;
       } catch (e) {
-        log(e);
+        logText += `${chalk.bold(chalk.redBright('error'))} | `;
       }
+
+      logText += `${name}`;
+
+      log(logText);
     }
+
+    log('Saving...');
 
     Scan.writeResult(result);
 

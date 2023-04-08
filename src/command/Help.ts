@@ -9,7 +9,7 @@ export default class Help extends AbstractCommand {
 
     text += chalk.bold('Welcome to The ENS Bulk Checker!');
     text += '\n';
-    text += 'Commands:';
+    text += chalk.bold('Commands:');
     text += '\n';
 
     const table = new Table({ head: ['name', 'description'] });

@@ -79,7 +79,7 @@ export default class Print extends AbstractCommand {
     const scanResult = Print.getScanResult();
 
     if (!scanResult) {
-      log('Nothing to show, lookup some names at first');
+      log(`You don't have scanned names or ${Print.filepath} file is broken`);
       return false;
     }
 
