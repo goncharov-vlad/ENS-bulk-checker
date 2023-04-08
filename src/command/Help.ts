@@ -1,4 +1,3 @@
-import Table from 'cli-table3';
 import chalk from 'chalk';
 import App from '../App';
 import AbstractCommand from './AbstractCommand';
@@ -9,18 +8,21 @@ export default class Help extends AbstractCommand {
 
     text += chalk.bold('Welcome to The ENS Bulk Checker!');
     text += '\n';
+    text += '\n';
     text += chalk.bold('Commands:');
     text += '\n';
 
-    const table = new Table({ head: ['name', 'description'] });
-    table.push(['help', 'Show this message']);
-
     // eslint-disable-next-line no-restricted-syntax
     for (const [name, { description }] of Object.entries(commands)) {
-      table.push([name, description]);
+      text += `${name}${description}`;
+      text += '\n';
     }
 
-    text += table.toString();
+    text += 'help        Shows this message';
+    text += '\n';
+    text += '\n';
+    text += `${chalk.bold('Homepage: ')}https://github.com/goncharov-vlad/ens-bulk-checker`;
+
     super(text);
   }
 

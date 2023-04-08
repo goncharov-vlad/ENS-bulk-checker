@@ -7,26 +7,24 @@ import App from '../App';
 import SmartContractFactory from '../SmartContractFactory';
 
 export default class Print extends AbstractCommand {
-  static filepath = './resource/result.json';
+  static filepath = './resource/scanResult.json';
 
   constructor() {
-    super('Show scan result');
+    super('       Show scan result');
+
+    const { filepath } = Print;
+
+    if (!fs.existsSync(filepath)) {
+      fs.writeFileSync(filepath, JSON.stringify([]));
+    }
   }
 
-  private static getScanResult(): ScanResult | false {
-    try {
-      const filepath = './resource/result.json';
+  private static getScanResult(): ScanResult {
+    const string = fs
+      .readFileSync(Print.filepath)
+      .toString();
 
-      const string = fs
-        .readFileSync(filepath)
-        .toString();
-
-      const json = JSON.parse(string);
-
-      return json.length ? json : false;
-    } catch {
-      return false;
-    }
+    return JSON.parse(string);
   }
 
   private static sortScanResult(scanResult: ScanResult): ScanResult {
@@ -54,16 +52,12 @@ export default class Print extends AbstractCommand {
       index + 1,
       name,
       price,
-      Date.now() + gracePeriod - expires > 0
+      Date.now() - (expires + gracePeriod) < 0
         ? (new Date(expires))
           .toUTCString()
           .replace('GMT', '')
           .substring(5, 22)
-        : chalk.bgWhite(
-          chalk.blue(
-            chalk.bold('FREE'),
-          ),
-        ),
+        : chalk.blue(chalk.bold('free')),
       `https://app.ens.domains/name/${name}.eth/register`,
     ]);
   }
@@ -78,8 +72,8 @@ export default class Print extends AbstractCommand {
 
     const scanResult = Print.getScanResult();
 
-    if (!scanResult) {
-      log(`You don't have scanned names or ${Print.filepath} file is broken`);
+    if (!scanResult.length) {
+      log('You don\'t have scanned names');
       return false;
     }
 
@@ -92,13 +86,8 @@ export default class Print extends AbstractCommand {
     table.push(...prepareScanResult);
 
     log(table.toString());
-    log(
-      chalk.bgWhite(
-        chalk.black(
-          chalk.bold('Above you see all the names you watch'),
-        ),
-      ),
-    );
+    log('');
+    log(chalk.bold('Above you see all the names you watch'));
 
     return true;
   }

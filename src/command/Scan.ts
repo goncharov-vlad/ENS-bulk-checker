@@ -15,21 +15,23 @@ export default class Scan extends AbstractCommand {
   registrarControllerContract: ethers.Contract;
 
   constructor() {
-    super('Scans your ENS names');
+    super('        Scans your ENS names');
 
     this.baseRegistrarImplementationContract = SmartContractFactory
       .createBaseRegistrarImplementation();
 
     this.registrarControllerContract = SmartContractFactory
       .createRegistrarController();
-  }
 
-  static getNames() {
     const { filepath } = Scan;
 
     if (!fs.existsSync(filepath)) {
       fs.writeFileSync(filepath, '');
     }
+  }
+
+  static getNames() {
+    const { filepath } = Scan;
 
     const string = fs
       .readFileSync(filepath)
@@ -69,19 +71,7 @@ export default class Scan extends AbstractCommand {
   }
 
   static writeResult(result: ScanResult) {
-    const { filepath } = Print;
-
-    if (!fs.existsSync(filepath)) {
-      fs.writeFileSync(filepath, JSON.stringify(result));
-      return;
-    }
-
-    const string = fs.readFileSync(filepath).toString();
-    const fileItems: ScanResult = JSON.parse(string);
-    const existedFiltered = fileItems
-      .filter((fileItem) => !result.find(({ name }) => (name === fileItem.name)));
-
-    fs.writeFileSync(filepath, JSON.stringify(existedFiltered.concat(result)));
+    fs.writeFileSync(Print.filepath, JSON.stringify(result));
   }
 
   async run() {
@@ -91,7 +81,7 @@ export default class Scan extends AbstractCommand {
     const duplicates = Scan.findDuplicates(names);
 
     if (duplicates.length) {
-      log(chalk.bold('Found duplicates:'), duplicates.length);
+      log(chalk.bold('Duplicates has been found:'), duplicates.length);
       log('');
       log(duplicates.join('\n'));
       log('');
@@ -106,7 +96,7 @@ export default class Scan extends AbstractCommand {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const name of names) {
-      let logText = `${names.length}/${result.length + 1} | `;
+      let logText = `${result.length + 1}/${names.length} | `;
 
       try {
         // eslint-disable-next-line no-await-in-loop
