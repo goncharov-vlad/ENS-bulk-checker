@@ -1,37 +1,24 @@
 import Table from 'cli-table3';
-import fs from 'fs';
 import chalk from 'chalk';
 import AbstractCommand from './AbstractCommand';
 import { ScanResult } from '../type/index';
 import App from '../App';
 import SmartContractFactory from '../SmartContractFactory';
+import FileManager from '../FileManager';
 
 export default class PrintCommand extends AbstractCommand {
-  static filepath = './resource/scanResult.json';
-  static favoriteFilepath = './resource/favorite.txt';
-
   constructor() {
-    const { filepath } = PrintCommand;
-    const { favoriteFilepath } = PrintCommand;
+    FileManager.createIfIsNotExist(FileManager.filepath.scanResult, JSON.stringify([]));
+    FileManager.createIfIsNotExist(FileManager.filepath.favorite, '');
 
-    if (!fs.existsSync(filepath)) {
-      fs.writeFileSync(filepath, JSON.stringify([]));
-    }
-
-    if (!fs.existsSync(favoriteFilepath)) {
-      fs.writeFileSync(favoriteFilepath, '');
-    }
-
-    super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${filepath})`);
+    super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${FileManager.filepath})`);
   }
 
   private static getScanResult(): ScanResult {
-    const string = fs
-      .readFileSync(PrintCommand.filepath)
-      .toString()
-      .trim();
-
-    return JSON.parse(string);
+    return JSON.parse(
+      FileManager
+        .getFileContentAsString(FileManager.filepath.scanResult),
+    );
   }
 
   private static sortScanResult(scanResult: ScanResult): ScanResult {
@@ -80,7 +67,7 @@ export default class PrintCommand extends AbstractCommand {
     const scanResult = PrintCommand.getScanResult();
 
     if (!scanResult.length) {
-      log(`There is nothing to show, no names have been scanned. Make sure names are scanned/checked first`);
+      log('There is nothing to show, no names have been scanned. Make sure names are scanned/checked first');
       return false;
     }
 

@@ -1,45 +1,31 @@
 import { ethers } from 'ethers';
-import fs from 'fs';
 import chalk from 'chalk';
 import AbstractCommand from './AbstractCommand';
 import App from '../App';
-import { ScanResult } from '../type';
-import Print from './PrintCommand';
 import SmartContractFactory from '../SmartContractFactory';
+import FileManager from '../FileManager';
 
 export default class ScanCommand extends AbstractCommand {
-  static filepath = './resource/name.txt';
-
   baseRegistrarImplementationContract: ethers.Contract;
 
   registrarControllerContract: ethers.Contract;
 
   constructor() {
-    const { filepath } = ScanCommand;
-
-    super(`        Check all your ENS names in the file ${filepath} (add names without the .eth suffix)`);
+    super(`        Check all your ENS names in the file ${FileManager.filepath.name} (add names without the .eth suffix)`);
 
     this.baseRegistrarImplementationContract = SmartContractFactory
       .createBaseRegistrarImplementation();
-
     this.registrarControllerContract = SmartContractFactory
       .createRegistrarController();
 
-    if (!fs.existsSync(filepath)) {
-      fs.writeFileSync(filepath, '');
-    }
+    FileManager.createIfIsNotExist(FileManager.filepath.name, '');
   }
 
   static getNames() {
-    const { filepath } = ScanCommand;
-
-    const string = fs
-      .readFileSync(filepath)
-      .toString()
-      .trim();
+    const string = FileManager.getFileContentAsString(FileManager.filepath.name);
 
     if (!string) {
-      return false
+      return false;
     }
 
     const names = string.split('\n');
@@ -70,16 +56,12 @@ export default class ScanCommand extends AbstractCommand {
     return [...new Set(names)];
   }
 
-  static writeResult(result: ScanResult) {
-    fs.writeFileSync(Print.filepath, JSON.stringify(result));
-  }
-
   async run() {
     const { log } = App;
     let names = ScanCommand.getNames();
 
     if (!names) {
-      log(`There are no names to look up, please add several to ${ScanCommand.filepath}`);
+      log(`There are no names to look up, please add several to ${FileManager.filepath.name}`);
       return false;
     }
 
@@ -118,7 +100,7 @@ export default class ScanCommand extends AbstractCommand {
 
     log('Saving...');
 
-    ScanCommand.writeResult(result);
+    FileManager.writeFile(FileManager.filepath.scanResult, JSON.stringify(result));
 
     return true;
   }
