@@ -17,7 +17,7 @@ export default class ScanCommand extends AbstractCommand {
   constructor() {
     const { filepath } = ScanCommand;
 
-    super(`        Checks all ENS that are in the file ${filepath} (add names without the .eth suffix)`);
+    super(`        Check all your ENS names in the file ${filepath} (add names without the .eth suffix)`);
 
     this.baseRegistrarImplementationContract = SmartContractFactory
       .createBaseRegistrarImplementation();

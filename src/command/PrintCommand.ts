@@ -10,13 +10,13 @@ export default class PrintCommand extends AbstractCommand {
   static filepath = './resource/scanResult.json';
 
   constructor() {
-    super('       Show scan result');
-
     const { filepath } = PrintCommand;
 
     if (!fs.existsSync(filepath)) {
       fs.writeFileSync(filepath, JSON.stringify([]));
     }
+
+    super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${filepath})`);
   }
 
   private static getScanResult(): ScanResult {

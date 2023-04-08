@@ -20,7 +20,7 @@ export default class HelpCommand extends AbstractCommand {
       text += '\n';
     }
 
-    text += 'help        Shows this message';
+    text += 'help        Display this message';
 
     super(text);
   }
