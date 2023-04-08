@@ -39,7 +39,7 @@ export default class ScanCommand extends AbstractCommand {
       .trim();
 
     if (!string) {
-      throw new Error(`You don't have any names to lookup, please add several to ${filepath}`);
+      return false
     }
 
     const names = string.split('\n');
@@ -78,10 +78,15 @@ export default class ScanCommand extends AbstractCommand {
     const { log } = App;
     let names = ScanCommand.getNames();
 
+    if (!names) {
+      log(`There are no names to look up, please add several to ${ScanCommand.filepath}`);
+      return false;
+    }
+
     const duplicates = ScanCommand.findDuplicates(names);
 
     if (duplicates.length) {
-      log(chalk.bold('Duplicates has been found:'), duplicates.length);
+      log(chalk.bold('Duplicates have been found:'), duplicates.length);
       log('');
       log(duplicates.join('\n'));
       log('');

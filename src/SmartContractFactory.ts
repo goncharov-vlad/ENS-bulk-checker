@@ -1,14 +1,13 @@
 import { ethers } from 'ethers';
 import baseRegistrarImplementationArtifact from './artifact/baseRegistrarImplementation.json';
 import registrarControllerArtifact from './artifact/registrarController.json';
-import getProvider from './getProvider';
 
 export default class SmartContractFactory {
   static createBaseRegistrarImplementation() {
     return new ethers.Contract(
       baseRegistrarImplementationArtifact.address,
       baseRegistrarImplementationArtifact.abi,
-      getProvider(),
+      SmartContractFactory.getProvider(),
     );
   }
 
@@ -16,7 +15,11 @@ export default class SmartContractFactory {
     return new ethers.Contract(
       registrarControllerArtifact.address,
       registrarControllerArtifact.abi,
-      getProvider(),
+      SmartContractFactory.getProvider(),
     );
+  }
+
+  private static getProvider() {
+    return new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER);
   }
 }

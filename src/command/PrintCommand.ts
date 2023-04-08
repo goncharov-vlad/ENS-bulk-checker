@@ -8,12 +8,18 @@ import SmartContractFactory from '../SmartContractFactory';
 
 export default class PrintCommand extends AbstractCommand {
   static filepath = './resource/scanResult.json';
+  static favoriteFilepath = './resource/favorite.txt';
 
   constructor() {
     const { filepath } = PrintCommand;
+    const { favoriteFilepath } = PrintCommand;
 
     if (!fs.existsSync(filepath)) {
       fs.writeFileSync(filepath, JSON.stringify([]));
+    }
+
+    if (!fs.existsSync(favoriteFilepath)) {
+      fs.writeFileSync(favoriteFilepath, '');
     }
 
     super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${filepath})`);
@@ -22,7 +28,8 @@ export default class PrintCommand extends AbstractCommand {
   private static getScanResult(): ScanResult {
     const string = fs
       .readFileSync(PrintCommand.filepath)
-      .toString();
+      .toString()
+      .trim();
 
     return JSON.parse(string);
   }
@@ -73,7 +80,7 @@ export default class PrintCommand extends AbstractCommand {
     const scanResult = PrintCommand.getScanResult();
 
     if (!scanResult.length) {
-      log('You don\'t have scanned names');
+      log(`There is nothing to show, no names have been scanned. Make sure names are scanned/checked first`);
       return false;
     }
 
@@ -86,8 +93,6 @@ export default class PrintCommand extends AbstractCommand {
     table.push(...prepareScanResult);
 
     log(table.toString());
-    log('');
-    log(chalk.bold('Above you see all the names you watch'));
 
     return true;
   }
