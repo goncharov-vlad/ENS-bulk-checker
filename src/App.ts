@@ -1,7 +1,7 @@
 import AbstractCommand from './command/AbstractCommand';
-import Help from './command/Help';
-import Print from './command/Print';
-import Scan from './command/Scan';
+import Help from './command/HelpCommand';
+import Print from './command/PrintCommand';
+import Scan from './command/ScanCommand';
 
 export default class App {
   defaultCommand: AbstractCommand;

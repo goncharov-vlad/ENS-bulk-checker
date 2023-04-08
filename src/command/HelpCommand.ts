@@ -2,11 +2,13 @@ import chalk from 'chalk';
 import App from '../App';
 import AbstractCommand from './AbstractCommand';
 
-export default class Help extends AbstractCommand {
+export default class HelpCommand extends AbstractCommand {
   constructor(commands: App['commands']) {
     let text = '';
 
     text += chalk.bold('Welcome to The ENS Bulk Checker!');
+    text += '\n';
+    text += `${chalk.bold('Homepage:')} https://github.com/goncharov-vlad/ens-bulk-checker`;
     text += '\n';
     text += '\n';
     text += chalk.bold('Commands:');
@@ -19,9 +21,6 @@ export default class Help extends AbstractCommand {
     }
 
     text += 'help        Shows this message';
-    text += '\n';
-    text += '\n';
-    text += `${chalk.bold('Homepage: ')}https://github.com/goncharov-vlad/ens-bulk-checker`;
 
     super(text);
   }

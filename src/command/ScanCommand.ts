@@ -4,10 +4,10 @@ import chalk from 'chalk';
 import AbstractCommand from './AbstractCommand';
 import App from '../App';
 import { ScanResult } from '../type';
-import Print from './Print';
+import Print from './PrintCommand';
 import SmartContractFactory from '../SmartContractFactory';
 
-export default class Scan extends AbstractCommand {
+export default class ScanCommand extends AbstractCommand {
   static filepath = './resource/name.txt';
 
   baseRegistrarImplementationContract: ethers.Contract;
@@ -15,7 +15,9 @@ export default class Scan extends AbstractCommand {
   registrarControllerContract: ethers.Contract;
 
   constructor() {
-    super('        Scans your ENS names');
+    const { filepath } = ScanCommand;
+
+    super(`        Checks all ENS that are in the file ${filepath} (add names without the .eth suffix)`);
 
     this.baseRegistrarImplementationContract = SmartContractFactory
       .createBaseRegistrarImplementation();
@@ -23,15 +25,13 @@ export default class Scan extends AbstractCommand {
     this.registrarControllerContract = SmartContractFactory
       .createRegistrarController();
 
-    const { filepath } = Scan;
-
     if (!fs.existsSync(filepath)) {
       fs.writeFileSync(filepath, '');
     }
   }
 
   static getNames() {
-    const { filepath } = Scan;
+    const { filepath } = ScanCommand;
 
     const string = fs
       .readFileSync(filepath)
@@ -76,9 +76,9 @@ export default class Scan extends AbstractCommand {
 
   async run() {
     const { log } = App;
-    let names = Scan.getNames();
+    let names = ScanCommand.getNames();
 
-    const duplicates = Scan.findDuplicates(names);
+    const duplicates = ScanCommand.findDuplicates(names);
 
     if (duplicates.length) {
       log(chalk.bold('Duplicates has been found:'), duplicates.length);
@@ -87,7 +87,7 @@ export default class Scan extends AbstractCommand {
       log('');
     }
 
-    names = Scan.removeDuplicates(names);
+    names = ScanCommand.removeDuplicates(names);
 
     log(chalk.bold('Names count:'), names.length);
     log('');
@@ -113,7 +113,7 @@ export default class Scan extends AbstractCommand {
 
     log('Saving...');
 
-    Scan.writeResult(result);
+    ScanCommand.writeResult(result);
 
     return true;
   }

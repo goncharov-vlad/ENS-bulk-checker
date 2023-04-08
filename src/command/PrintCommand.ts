@@ -6,13 +6,13 @@ import { ScanResult } from '../type/index';
 import App from '../App';
 import SmartContractFactory from '../SmartContractFactory';
 
-export default class Print extends AbstractCommand {
+export default class PrintCommand extends AbstractCommand {
   static filepath = './resource/scanResult.json';
 
   constructor() {
     super('       Show scan result');
 
-    const { filepath } = Print;
+    const { filepath } = PrintCommand;
 
     if (!fs.existsSync(filepath)) {
       fs.writeFileSync(filepath, JSON.stringify([]));
@@ -21,7 +21,7 @@ export default class Print extends AbstractCommand {
 
   private static getScanResult(): ScanResult {
     const string = fs
-      .readFileSync(Print.filepath)
+      .readFileSync(PrintCommand.filepath)
       .toString();
 
     return JSON.parse(string);
@@ -70,15 +70,15 @@ export default class Print extends AbstractCommand {
       head: ['#', 'Name', 'Last Price', 'Expires', 'Link'],
     });
 
-    const scanResult = Print.getScanResult();
+    const scanResult = PrintCommand.getScanResult();
 
     if (!scanResult.length) {
       log('You don\'t have scanned names');
       return false;
     }
 
-    const prepareScanResult = await Print.prepareScanResult(
-      Print.sortScanResult(
+    const prepareScanResult = await PrintCommand.prepareScanResult(
+      PrintCommand.sortScanResult(
         scanResult,
       ),
     );
