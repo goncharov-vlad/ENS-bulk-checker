@@ -75,7 +75,6 @@ Names count: 10
 9/10 | success | crazyking
 10/10 | success | badking
 Saving...
-
 ```
 
 Time to see information about the names. Run `npm run start -- print`
