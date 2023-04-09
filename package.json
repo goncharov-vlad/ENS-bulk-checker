@@ -6,7 +6,9 @@
     "ethers": "^5.6.9"
   },
   "scripts": {
-    "start": "ts-node-esm src/index.ts",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc --outDir build",
+    "start": "node build/index.js",
     "lint": "eslint src --ext .ts,.js --fix"
   },
   "devDependencies": {

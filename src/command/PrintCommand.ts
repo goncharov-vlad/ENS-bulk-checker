@@ -11,7 +11,7 @@ export default class PrintCommand extends AbstractCommand {
     FileManager.createIfIsNotExist(FileManager.filepath.scanResult, JSON.stringify([]));
     FileManager.createIfIsNotExist(FileManager.filepath.favoriteName, '');
 
-    super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${FileManager.filepath})`);
+    super(`       Show information about your ENS names that have been checked/scanned previously (data saved in the file ${FileManager.filepath.scanResult})`);
   }
 
   private static getScanResult(): ScanResult {
@@ -85,14 +85,14 @@ export default class PrintCommand extends AbstractCommand {
     const onlyFavoriteNameResult = scanResult.filter(({ name }) => favoriteNames.includes(name));
     const onlyOthersNameResult = scanResult.filter(({ name }) => !favoriteNames.includes(name));
 
-    log(chalk.bold('Favorite ENS names:', onlyFavoriteNameResult.length));
+    log(chalk.bold('Favorite names:', onlyFavoriteNameResult.length));
 
     if (onlyFavoriteNameResult.length) {
       log((await PrintCommand.createTable(onlyFavoriteNameResult))
         .toString());
     }
 
-    log(chalk.dim(`${chalk.bold('NOTE')}: You can save your favorite ENS names in the file ${FileManager.filepath.favoriteName}`));
+    log(chalk.dim(`${chalk.bold('NOTE')}: You can save your favorite names in the file ${FileManager.filepath.favoriteName}`));
     log('');
     log(chalk.bold('Other ENS names:', onlyOthersNameResult.length));
 
