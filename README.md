@@ -4,7 +4,7 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
-The ENS Name Bulk Checker is a command-line tool that allows you to check the availability of multiple Ethereum Name Service (ENS) names at once. With this tool, you can easily monitor the availability of a large list of ENS names, which can save you time and effort when trying to find a domain name that suits your needs
+The ENS Name Bulk Checker is a command-line tool that allows you efficiently monitor the availability of many Ethereum Name Service (ENS) names simultaneously. With this tool, you can easily monitor the availability of a large list of ENS names, which can save you time and effort when trying to find a domain name that suits your needs
 
 ## What is Ethereum Name Service (ENS)?
 [The Ethereum Name Service (ENS)](https://app.ens.domains/) is a decentralized system that allows users to register human-readable names (like "myname.eth") that can be used in place of long and complex Ethereum addresses. This makes it easier for people to send cryptocurrency, interact with decentralized applications, and establish a brand identity on the Ethereum blockchain. ENS is built on top of the Ethereum blockchain and uses smart contracts to securely manage and resolve names to the corresponding Ethereum addresses
