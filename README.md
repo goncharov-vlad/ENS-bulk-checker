@@ -160,6 +160,4 @@ Other ENS names: 8
 
 **To scan for new names**, simply add them to the rest of the names and run `npm run start --scan` as you did before. The command will not only scan for recently added names, but it will also update information on old ones you are tracking
 
-Since ENS implemented ERC-721 you can see the names as NFTs on the most popular NFT marketplaces ([looksrare](https://looksrare.org/), [rarible](https://rarible.com/), [opensea](https://opensea.io/)). By the way, I managed to grab a couple of nice names: `tabulation.eth`, `rockyman.eth`, and my favorite `crazyduck.eth` 
-
-\\^,^/
+Since ENS implemented ERC-721 you can see the names as NFTs on the most popular NFT marketplaces ([looksrare](https://looksrare.org/), [rarible](https://rarible.com/), [opensea](https://opensea.io/)).
